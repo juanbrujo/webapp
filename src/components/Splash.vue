@@ -3,14 +3,17 @@
     <transition name="fade">
       <div class="Splash" v-if="splashScreen">
         <div class="Splash-body">
+          <p>userPosition: {{ userPosition }}</p>
+          <p>userPosition2: {{ userPosition2 }}</p>
           <h1>Growler App</h1>
+          <button style="border: 1px solid gray" @click="getUserLocation">userPosition2</button>
         </div>
       </div>
     </transition>
     <transition name="fade">
       <div class="Locate" v-if="locationScreen">
         <div class="Locate-body">
-          userPosition: {{ userPosition }}
+          locationScreen
         </div>
       </div>
     </transition>
@@ -18,33 +21,35 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import VueGeolocation from 'vue-browser-geolocation'
+
+Vue.use(VueGeolocation)
+
 export default {
   name: 'Splash',
   data () {
     return {
       splashScreen: true,
       locationScreen: false,
-      userPosition: []
+      userPosition: [],
+      userPosition2: []
     }
   },
   methods: {
-    getGeoLocation (callback) {
-      if (navigator.geolocation) {
+    getUserLocation: function () {
+      // el boton activa este metodo
+      if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(position => {
-          this.userPosition = position.coords
-          if (typeof callback === 'function') {
-            callback()
-          }
+          this.userPosition2 = position.coords;
         })
       }
     }
   },
   mounted () {
-    this.getGeoLocation(function () {
-      setTimeout(()=>{
-        this.splashScreen = false
-        this.locationScreen = true
-      }, 3000)
+    this.$getLocation()
+    .then(coordinates => {
+      this.userPosition = coordinates
     })
   }
 }
