@@ -32,8 +32,8 @@ export default {
     return {
       splashScreen: true,
       locationScreen: false,
-      userPosition: [],
-      userPosition2: []
+      userPosition: {},
+      userPosition2: {}
     }
   },
   methods: {
@@ -41,7 +41,7 @@ export default {
       // el boton activa este metodo
       if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(position => {
-          this.userPosition2 = position.coords;
+          this.userPosition2 = { lat: position.coords.latitude, lng: position.coords.longitude };
         })
       }
     }
